@@ -1,4 +1,4 @@
-function [G, s] = vertseismicprofile( depth, m, n )
+function [G, s, z, y] = vertseismicprofile( depth, m, n )
     % model spacing and vector (m,1)
     dz = depth / m;
     z = dz .* (1:m)';
@@ -9,6 +9,7 @@ function [G, s] = vertseismicprofile( depth, m, n )
     if ( m == n )
         % matrix is lower triangular
         G = dz .* tril( ones(n) );
+        y = z;
     else
         % over/under/mixed determined
         % gamma vector
