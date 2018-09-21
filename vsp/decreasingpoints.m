@@ -6,7 +6,7 @@
 % Cd = I
 depth = 40;
 m = 80;
-n = 80;
+n = 10;
 dz = depth / n;
 Cd = eye(n);
 
@@ -26,22 +26,7 @@ Wm = L'*L;
 % predicted data vector
 t1 = G * s;
 % add noise ( convert 0.1 ms to 0.0001 s )
-t1 = t1 + normrnd( 0, 0.0001, [80, 1] );
-
-figure
-    plot(z, s );
-    title('True slowness');
-    xlabel('depth (m)');
-    ylabel('slowness (s/m)');
-
-% naive try
-sopt = wdls( G, Cd, Wm, t1, 0.1 );
-
-figure
-    plot(z, sopt );
-    title('Slowness: WDLS, naive lambda');
-    xlabel('depth (m)');
-    ylabel('slowness (s/m)');
+t1 = t1 + normrnd( 0, 0.0001, [n, 1] );
 
 
 aopt = morozov( G, Cd, Wm, t1, G*s, 0, 1);

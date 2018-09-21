@@ -16,6 +16,13 @@ c(1) = -2;
 c(2) = 1;
 c(end)=1;
 L = (1/dz^2) .* toeplitz(c, c');
+
+%for weighting
+b1 = round(15 / (depth / m));
+b2 = round(25 / (depth / m));
+wn = zeros(1,m);
+wn(b1:b2) = 0.5;
+L = L + repmat(wn, m, 1);
 Wm = L'*L;
 
 % setting up model
@@ -28,27 +35,15 @@ t1 = G * s;
 % add noise ( convert 0.1 ms to 0.0001 s )
 t1 = t1 + normrnd( 0, 0.0001, [80, 1] );
 
-figure
-    plot(z, s );
-    title('True slowness');
-    xlabel('depth (m)');
-    ylabel('slowness (s/m)');
 
-% naive try
-sopt = wdls( G, Cd, Wm, t1, 0.1 );
-
-figure
-    plot(z, sopt );
-    title('Slowness: WDLS, naive lambda');
-    xlabel('depth (m)');
-    ylabel('slowness (s/m)');
-
-
-aopt = morozov( G, Cd, Wm, t1, G*s, 0, 1);
-mest = wdls( G, Cd, Wm, t1, aopt);
+mest = wdls( G, Cd, Wm, t1, 0.001);
 
 figure
     plot(z, mest );
-    title('Slowness: WDLS, optimal lambda');
+    title('Slowness: WDLS, Small lambda');
     xlabel('depth (m)');
     ylabel('slowness (s/m)');
+
+
+
+% with initial guess of all 2's
