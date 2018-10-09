@@ -1,4 +1,4 @@
-function [lambda] = morozov(G, Cd, Wm, de, d, lmin, lmax)
+function [lambda] = lambdacurve(G, Cd, Wm, de, d, lmin, lmax)
     fun = @(x) norm(G * wdls(G, Cd, Wm, de, x) - d, 'fro') - 0;
     
     x = linspace(lmin, lmax);
