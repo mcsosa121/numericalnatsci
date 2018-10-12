@@ -80,6 +80,16 @@ sings = sings(1:25);
 Ut = U(:,1:25);
 Vt = V(:,1:25);
 Gp = Ut * diag(sings) * Vt';
+sinv = arrayfun( @(x) pinv(x), sings );
+sol_trunc = Vt * diag(sinv) * Ut' * dnoisy;
+
+% figure
+%     plot(t,sol_trunc);
+%     xlim([-5 100]);
+%     ylim([min(sol_trunc) max(sol_trunc)]);
+%     title('TSVD model');
+%     xlabel('Time');
+%     ylabel('Response');
 
 % Model resolution matrix Rm = Gtilde*G = Vt*Vt'
 Rm = Vt*Vt';
@@ -88,4 +98,13 @@ Rm = Vt*Vt';
 %     imagesc(Rm);
 %     title('Truncated Model Resolution Matrix');
 
+% Seeing how well the model approximates the identity
+cut = Rm(:,80);
+% figure
+%     plot(t(1:210), cut);
+%     xlabel('Time');
+%     ylabel('Val');
+%     xlim([-5 100]);
+%     ylim([min(cut) max(cut)]);
+%     title('Cut through Rm');
 
