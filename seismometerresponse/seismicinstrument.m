@@ -29,12 +29,63 @@ d = G*mtrue;
 
 % noise is gaussian with mean 0, var = 1% of peak output
 v = 0.01 * max(d);
-dnoisey = d + normrnd( 0, v, [210,1] );
+dnoisy = d + normrnd( 0, v, [210,1] );
 
-figure
-    plot(t,dnoisey);
-    xlim([-5 100]);
-    ylim([0 max(dnoisey)]);
-    title('Noisy data');
-    xlabel('Time');
-    ylabel('Voltage');
+% figure
+%     plot(t,dnoisy);
+%     xlim([-5 100]);
+%     ylim([0 max(dnoisey)]);
+%     title('Noisy data');
+%     xlabel('Time');
+%     ylabel('Voltage');
+
+% solving using singular value decomp
+[U, Sigma, V, m] = srp_svd(G, d);
+% noisy solution
+[Un, Sigman, Vn, mn] = srp_svd(G,dnoisy);
+
+% figure
+%     plot(t,m);
+%     xlim([-5 100]);
+%     ylim([0 1]);
+%     title('Noise free SVD model');
+%     xlabel('Time');
+%     ylabel('Response');
+% 
+% figure
+%     plot(t,mn);
+%     xlim([-5 100]);
+%     ylim([min(mn) max(mn)]);
+%     title('Noisy SVD model');
+%     xlabel('Time');
+%     ylabel('Response');
+
+sings = diag(Sigma);
+ind = find(sings<10e-5);
+sings = sings(1:ind-1);
+U = Un(:,1:length(sings));
+V = Vn(:,1:length(sings));
+% figure
+%     clf
+%     semilogy(sings);
+%     axis tight;
+%     title('Singular values');
+
+condK = max(sings) / min(sings);
+disp(condK);
+disp('Yikes that is big');
+
+% Using truncated SVD, 25 values
+sings = sings(1:25);
+Ut = U(:,1:25);
+Vt = V(:,1:25);
+Gp = Ut * diag(sings) * Vt';
+
+% Model resolution matrix Rm = Gtilde*G = Vt*Vt'
+Rm = Vt*Vt';
+
+% figure
+%     imagesc(Rm);
+%     title('Truncated Model Resolution Matrix');
+
+
