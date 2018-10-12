@@ -99,12 +99,24 @@ Rm = Vt*Vt';
 %     title('Truncated Model Resolution Matrix');
 
 % Seeing how well the model approximates the identity
-cut = Rm(:,80);
+cut = Rm(:,100);
+
 % figure
-%     plot(t(1:210), cut);
+%     plot((1:210), cut);
 %     xlabel('Time');
 %     ylabel('Val');
-%     xlim([-5 100]);
+%     xlim([0 210]);
 %     ylim([min(cut) max(cut)]);
 %     title('Cut through Rm');
+
+% Now plotting the tikhonov solution 
+
+[rhos, etas, lambdas, kappas] = srp_lcurve_plot(G,d);
+rho_corner = srp_lcurve_opt(G,d);
+figure(1)
+    loglog(rhos,etas,'k-');
+    xlabel('Residual Norm ||Gm - d||_2')
+    ylabel('Solution Norm ||m||_2')
+    title('Displaying the L-curve (fig. 1)')
+    
 
