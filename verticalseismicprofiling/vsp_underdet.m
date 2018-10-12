@@ -1,3 +1,4 @@
+addpath(genpath('./numericalnatsci/utilities'));
 % Solve the Vertical Seismic problem using damped least squares
 % aka G*= m0 + (G'*Cd^{-1}*G + eps^2*Wm)^{-1}*G'*Cd^{-1}*(d - G*m0)
 % Wm = L'L  where L is second derivative damping matrix
@@ -29,7 +30,7 @@ t1 = G * s;
 t1 = t1 + normrnd( 0, 0.0001, [n, 1] );
 
 
-aopt = morozov( G, Cd, Wm, t1, G*s, 0, 1);
+aopt = lambdacurve( G, Cd, Wm, t1, G*s, 0, 1);
 mest = wdls( G, Cd, Wm, t1, aopt);
 
 figure

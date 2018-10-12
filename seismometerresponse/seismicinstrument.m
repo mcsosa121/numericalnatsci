@@ -46,10 +46,10 @@ d = G*mt;
 %     ylabel('Voltage');
 
 % noise is gaussian with mean 0, var = 0.01
-d = d + normrnd( 0, 0.0001, [210,1] );
+dnoise = d + 25*normrnd( 0, 0.01, [210,1] );
 
 figure
-    plot((-5:0.5:99.5),d);
+    plot((-5:0.5:99.5),dnoise);
     title('Noisy data');
     xlabel('Time');
     ylabel('Voltage');
