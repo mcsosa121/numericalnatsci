@@ -111,10 +111,32 @@ cut = Rm(:,100);
 
 % Now plotting the L-curve
 [rhos, etas, lambdas, kappas] = srp_lcurve_plot(G,d);
-
-rho_corner = srp_lcurve_opt(G,d);
+rhos = rhos';
+etas = flip(etas)';
+rho_corner = srp_lcurve_opt(G,d, 1e-4, 1);
+optlambda = srp_lcurve_opt(G,d,1e-4,1);
+[ro, eo, ~, ~] = srp_lcurve(G,d,optlambda);
 figure(1)
-    loglog(rhos,etas);
+    clf
+    plot( lambdas, rhos, 'o'); 
+    hold on;
+    axis square;
+    %plot(rhos,lambdas, etas, lambdas);
+%     loglog(ro,eo);
     title('Lcurve');
+    xlabel('||Gm-d||');
+    ylabel('||m||');
     
-
+% figure(2)
+% clf
+% bookfonts;
+% plot(rhos,etas,'k-');
+% xlabel('Residual Norm ||Gm - d||_2')
+% ylabel('Solution Norm ||m||_2')
+% axis tight
+% hold on
+% H=plot(ro,eo,'ko');
+% set(H,'markersize',16)
+% hold off
+% print -deps2 c4flcurve0
+% display('Displaying the L-curve (fig. 1)')

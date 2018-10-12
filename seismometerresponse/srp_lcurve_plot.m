@@ -12,4 +12,4 @@ function [rhos, etas, lambdas, kappas] = srp_lcurve_plot(G,d, lmin, lmax)
   for k = 1:length(lambdas)
     [rhos(k), etas(k), kappas(k), ~] = srp_lcurve(G,d, lambdas(k));
   end
-
+end
