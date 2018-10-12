@@ -1,55 +1,40 @@
 % Solving the Even Determined Sesimic Instrument Response Inverse Problem
 
-% A Seismometer measures displacement of weights experiencing mechanical 
-% forces. However response times can be skewed and results in broadened
-% signals from mechanical perturbations.  
-% times from -5 to 99.5 in 0.5 increments. So accurate estimations 
-% require the instrument function to be removed from the observed signal
-% via deconvolution. 
-
-% Signals received at times from -5.0 sec to 99.5 sec in 0.5 sec increments
-t = ( -5.0 : 0.5 : 99.5 );
 % Constants (time and gain)
-tc = 10;
+tc = 12;
 gc = tc / exp(1);
-peaks = [8,20];
-consts = [1,0.38];
-width = 2;
-% true ground acceleration function
-ga = groundaccel( peaks, consts, width );
-% true model
-mt = arrayfun( @(x) ga(x), t )';
 
+% Model
+[G, mtrue, t] = seismometerResponseProb( -5.0, 99.5, 0.5, gc, tc );
+
+% True Signal Figure
 % figure
-%     plot((1:length(mt)),mt);
+%     plot(t,mtrue);
+%     xlim([-5 100]);
+%     ylim([0 1]);
 %     title('True Ground Acceleration');
 %     xlabel('Time');
 %     ylabel('Response');
 
-% Discretizing problem
-G = zeros(210,210);
-for i=1:length(t)
-    for j=1:length(t)
-       if ( i >= j )
-         diff = t(i) - t(j);
-         G(i,j) = diff*exp(-diff / tc ) * 0.5;
-       end
-    end
-end
-
 % noise free data
-d = G*mt;
+d = G*mtrue;
+
 % figure
-%     plot((1:length(t)),d);
+%     plot(t,d);
+%     xlim([-5 100]);
+%     ylim([0 max(d)]);
 %     title('Noise free data');
 %     xlabel('Time');
 %     ylabel('Voltage');
 
-% noise is gaussian with mean 0, var = 0.01
-dnoise = d + 25*normrnd( 0, 0.01, [210,1] );
+% noise is gaussian with mean 0, var = 1% of peak output
+v = 0.01 * max(d);
+dnoisey = d + normrnd( 0, v, [210,1] );
 
 figure
-    plot((-5:0.5:99.5),dnoise);
+    plot(t,dnoisey);
+    xlim([-5 100]);
+    ylim([0 max(dnoisey)]);
     title('Noisy data');
     xlabel('Time');
     ylabel('Voltage');
