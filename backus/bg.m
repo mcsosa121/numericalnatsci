@@ -1,3 +1,8 @@
-% Backus and Gilbert
-Re = 6.3708*10e6;
-Ie = 8.02*10e37;
+function [est] = bg(rh, d, g, h)
+    % Inputs: rh - rhat
+    %         Depth - d
+    %         g - vector of g funcs
+    %         h - matrix of  
+    [q1, eps1[ = integral( 
+
+end
