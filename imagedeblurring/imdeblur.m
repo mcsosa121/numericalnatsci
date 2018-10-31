@@ -28,7 +28,16 @@ m0 = zeros(npts,1);
 
 [mopt, m2, e2] = cgls(g, imb, 100, m0);
 figure
-    plot(e2, m2 );
+    loglog(e2, m2, '--s');
     title('L-curve');
     xlabel('L2 error');
     ylabel('L2 length');
+
+% plot the 'unblurred img'
+% iblurnaive = reshape(mopt, m, n);
+% imshow(iblurnaive);
+
+% Optimal curve around 11 iterations
+[ml, ~, ~] = cgls(g, imb, 11, m0);
+iblurlmb = reshape(ml, m,n);
+imshow(iblurlmb);

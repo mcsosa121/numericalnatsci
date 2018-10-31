@@ -16,9 +16,10 @@ function [sol, l2prede, l2mc] = cgls(G, d, n, m0)
     
     % setting initial values
     s = d - G*m0;
-    r = G'*s(1);
-    p = r(1);
-    q = G*p(1);
+    r = G'*s;
+    p = r;
+    q = G*p;
+    m = m0;
     
     for k = 0:n-1
         alphas(k+1) = (r'*r) / (q'*q);
