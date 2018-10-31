@@ -21,6 +21,14 @@ g= (1/(2*pi*sig^2))*kron(g,g);
 % generate blurred image
 imr = reshape(im, npts, 1);
 imb = g * imr + scale * randn(npts, 1);
-imblur = reshape(imb, m,n);
 
+% imblur = reshape(imb, m,n);
 % imshow(imblur);
+m0 = zeros(npts,1);
+
+[mopt, m2, e2] = cgls(g, imb, 100, m0);
+figure
+    plot(e2, m2 );
+    title('L-curve');
+    xlabel('L2 error');
+    ylabel('L2 length');

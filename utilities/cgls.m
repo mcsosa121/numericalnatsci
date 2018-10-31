@@ -20,7 +20,7 @@ function [sol, l2prede, l2mc] = cgls(G, d, n, m0)
     p = r(1);
     q = G*p(1);
     
-    for k = 0:n
+    for k = 0:n-1
         alphas(k+1) = (r'*r) / (q'*q);
         m = m + alphas(k+1) * p;
         
